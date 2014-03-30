@@ -1,0 +1,30 @@
+term.setBackgroundColor(1)
+term.setTextColor(barva)
+term.clear()
+msgID=0
+local function loadMsg(id)
+if not fs.exists("db/messages/"..id) then
+fs.create("db/messages/"..id) end
+f=fs.open("db/messages/"..id,"r")
+sMsg=f.readAll()
+if not fs.exists("db/messages") then fs.makeDir("db/messages") end
+for i=1,h do term.setCursorPos(10,i) print("|") end
+term.scroll(-1)
+stop=false
+while not stop do
+event, char, par2, par3 = os.pullEvent()
+if event=="mouse_click" then
+if par2<=10 then
+loadMsg(par3+msgID)
+end
+if par2>=12 and par3==h then
+term.setCursorPos(12,h)
+newMsg=read()
+rednet.send(cID,newMsg)
+f=fs.open("db/messages/"..cID,"a")
+f.write("\n<you>",newMsg,"</you>")
+f.close()
+loadMsg(cID)
+end
+end
+end

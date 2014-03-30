@@ -1,0 +1,14 @@
+file=fs.open("sys/config","r")
+data = file.readAll()
+file:close()
+sets=textutils.unserialize(data)
+barva=sets["textColor"]
+lang=sets["lang"]
+bgColor=sets["bgColor"]
+version=sets["version"]
+topColor=sets["topColor"]
+celsius=sets["tempUnit"]
+tFormat=sets["tFormat"]
+city=sets["city"]
+last="sys/logo"
+shell.run("sys/"..lang)

@@ -1,0 +1,29 @@
+file = io.open("sys/session", "r")
+sname = file : read()
+file : close()
+if not fs.exists("files/documents/") then
+shell.run("mkdir", "files/documents/")
+end
+sleep(.001)
+os.pullEvent = os.pullEventRaw
+drawMenu(var105)
+print("")
+print("")
+print(var106)
+print(var5)
+write(" ")
+doc = read()
+if doc == nil or doc == "" then
+print(error12)
+elseif doc == var110 then
+shell.run("sys/app")
+else
+pa1 = "files/documents/"
+path = pa1..doc
+shell.run("edit", path)
+writing = false
+end
+while not writing do
+shell.run("sys/app")
+writing = ""
+end

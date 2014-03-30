@@ -1,0 +1,86 @@
+sleep(.001)
+term.clear()
+drawMenu(var41)
+print("")
+term.setBackgroundColor(bgColor)
+print(var42)
+print(var43)
+print(var44)
+print(var45)
+print(var46)
+print(var47)
+print("")
+print("")
+stop = false
+while not stop do
+event , char, par2, par3 = os.pullEvent()
+if event == "key" and char == 2 or char == 79 then
+os.sleep(.001)
+drawMenu(var55)
+print("")
+print(var56)
+print("")
+print("")
+term.setCursorPos(22,3)
+ub = read()
+file=fs.open("db/users/blocked/"..ub,"w")
+file.write()
+file : close()
+print(var57)
+os.sleep(1)
+shell.run("sys/ap")
+  elseif event == "key" and char == 3 or char == 80 then
+  stop = true
+shell.run("sys/ap_sdu")
+  elseif event=="mouse_click" or event=="monitor_touch" then
+  click(1,4,#var44,4,"sys/ap_sdu",2)
+  click(1,5,#var43,5,"sys/ap_cl",3)
+  click(1,6,#var45,6,"reboot",4)
+  click(1,7,#var46,7,"sys/deleteall",5)
+  click(1,8,#var47,8,"sys/loggedin",6)
+  if par2>=1 and par2<=#var42 and par3==3 then
+  os.sleep(.001)
+drawMenu(var55)
+print("")
+print(var56)
+print("")
+print("")
+term.setCursorPos(22,3)
+ub = read()
+file=fs.open("db/users/blocked/"..ub,"w")
+file.write()
+file : close()
+print(var57)
+os.sleep(1)
+shell.run("sys/ap")
+end
+if event=="chat_command" and char=="1" then
+  os.sleep(.001)
+drawMenu(var55)
+print("")
+print(var56)
+print("")
+print("")
+term.setCursorPos(22,3)
+ub = read()
+file=fs.open("db/users/blocked/"..ub,"w")
+file.write()
+file : close()
+print(var57)
+os.sleep(1)
+shell.run("sys/ap")
+end
+  elseif event == "key" and char == 4 or char == 81 then
+  stop = true
+  shell.run("sys/ap_cl")
+  elseif event == "key" and char == 5 or char == 75 then
+  stop = true
+  os.reboot()
+  elseif event == "key" and char == 6 or char == 76 then
+  stop = true
+  shell.run("sys/deleteall")
+  elseif event == "key" and char == 7 or char == 77 then
+  stop = true
+  shell.run("sys/loggedin")
+ end
+end

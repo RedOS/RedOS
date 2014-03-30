@@ -1,0 +1,46 @@
+w,h=term.getSize()
+wStred=16
+sleep(0.1)
+function drawMenu(text)
+term.setBackgroundColor(bgColor)
+term.clear()
+term.setCursorPos(1,1)
+term.setCursorPos(1,1)
+term.setTextColor(1)
+paintutils.drawLine(1, 1, w, 1, topColor)
+term.setCursorPos((w-#text)/2,1)
+print(text)
+term.setTextColor(barva)
+term.setBackgroundColor(bgColor)
+end
+function click(w,h,endW,endH,prog,num)
+if char==1 or char==2 or char==3 then
+if par2>=w and par2<=endW and par3>=h and par3<=endH then
+stop=true
+shell.run(prog)
+end
+end
+if char==tostring(num) then
+stop=true
+shell.run(prog)
+end
+end
+drawMenu(var1)
+print(" ")
+print(var2)
+print(var3)
+term.setBackgroundColor(bgColor)
+stop = false
+while not stop do
+event, char, par2, par3 = os.pullEvent()
+if event == "key" and char == 2 or char == 79 then
+stop = true
+shell.run("sys/login")
+elseif event == "key" and char == 3 or char == 80 then
+stop = true
+shell.run("sys/register")
+elseif event=="mouse_click" or event=="monitor_touch" or event == "chat_command" then
+click(1,4,#var2,4,"sys/login",1)
+click(1,5,#var3,5,"sys/register",2)
+end
+end

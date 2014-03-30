@@ -1,0 +1,66 @@
+drawMenu(var23)
+term.setCursorPos(1,15)
+term.setTextColor(colors.lightGray)
+print(var123)
+term.setCursorPos(1,3)
+term.setTextColor(barva)
+term.setBackgroundColor(colors.white)
+pathA = "files"
+oldPath = pathA
+local path = fs.list(pathA)
+for number, prog in pairs(path) do
+if fs.isDir(pathA.."/"..prog) then
+term.setTextColor(colors.cyan)
+print(" "..prog)
+else
+term.setTextColor(colors.lightGray)
+print(" "..prog)
+end
+end
+term.setTextColor(barva)
+print(key1)
+stop = false
+while not stop do
+event, char = os.pullEvent()
+if event == "key" and char ~= 28 or event == "mouse_scroll" or event == "mouse_click" then
+shell.run("sys/downloads")
+stop = true
+elseif event == "key" and char == 28 then
+write(" "); aPath = read()
+if (aPath:sub(1,2)== "r ") then
+runPath=pathA.."/"..(aPath:sub(3, #aPath))
+shell.run(runPath)
+if event == "key" and char ~= 28 or event == "mouse_scroll" or event == "mouse_click" then
+shell.run("sys/downloads")
+end
+elseif (aPath:sub(1,2)== "d ") then
+delPath=pathA.."/"..aPath:sub(3, #aPath)
+fs.delete(delPath)
+if event == "key" and char ~= 28 or event == "mouse_scroll" or event == "mouse_click" then
+shell.run("sys/downloads")
+end
+else
+pathA = pathA.."/"..aPath
+if fs.exists(pathA) and fs.isDir(pathA) then
+drawMenu(var23)
+print("")
+local path = fs.list(pathA)
+for number, prog in pairs(path) do
+if fs.isDir(pathA.."/"..prog) then
+term.setTextColor(colors.cyan)
+print(" "..prog)
+else
+term.setTextColor(colors.lightGray)
+print(" "..prog)
+end
+end
+term.setTextColor(barva)
+print(key1)
+oldPath = pathA
+else
+print("Not folder")
+pathA=oldPath
+end
+end
+end
+end

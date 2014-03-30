@@ -1,0 +1,54 @@
+term.setCursorPos(22,4)
+drawMenu(var64)
+if not http then
+print(var96)
+print(key1)
+local event
+event = os.pullEvent("key")
+if event then
+shell.run("sys/ap")
+end
+else
+vFile=http.get("https://dl.dropboxusercontent.com/u/52196276/versions")
+if vFile then
+recBuild=vFile.readLine()
+devBuild=vFile.readLine()
+vFile:close()
+else
+recBuild="Unknown"
+devBuild="Unknown"
+end
+print("")
+if recBuild ~= version then
+clr=colors.red
+else
+clr=barva
+end
+term.setTextColor(clr)
+print(var130..recBuild)
+print("")
+term.setTextColor(barva)
+print(var131..devBuild)
+print("")
+print(var132..version)
+print("")
+print(var65)
+print(var31)
+print("")
+print("") 
+stop = false
+while not stop do
+event, char, par2, par3 = os.pullEvent()
+if event == "key" and char == 2 or char == 79 then
+shell.run("sys/update")
+stop = true
+elseif event=="mouse_click" or event=="monitor_touch" then
+click(1,9,#var65,9,"sys/update",1)
+click(1,10,#var31,10,"sys/ap",2)
+elseif event == "key" and char == 3 or char == 80 then
+shell.run("sys/ap")
+stop = true
+end
+end
+end
+shell.run("sys/ap")

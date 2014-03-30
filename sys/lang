@@ -1,0 +1,87 @@
+file=fs.open("sys/config","r")
+data = file.readAll()
+file:close()
+sets=textutils.unserialize(data)
+drawMenu(var114)
+print("")
+print(" [1] English")
+print(" [2] Deutsch")
+print(" [3] Polski")
+print(" [4] Dansk")
+print(" [5] Cesky")
+print("")
+last="sys/loggedin"
+stop = false
+while not stop do
+event, char, par2, par3 = os.pullEvent()
+if event == "key" and char == 2 or char == 79 then
+sets.lang="varEN"
+langu="sys/varEN"
+stop=true
+elseif event == "key" and char == 3 or char == 80 then
+sets.lang="varDE"
+langu="sys/varDE"
+stop = true
+elseif event == "key" and char == 4 or char == 81 then
+sets.lang="varPL"
+langu="sys/varPL"
+stop = true
+elseif event == "key" and char == 5 or char == 75 then
+sets.lang="varDN"
+langu="sys/varDN"
+stop = true
+elseif event == "key" and char == 6 or char == 76 then
+sets.lang="varCZ"
+langu="sys/varCZ"
+stop = true
+elseif event == "mouse_click" or event == "monitor_touch" then
+if par2 > 0 and par2 <= 12 and par3 == 3 then
+sets.lang="varEN"
+langu="sys/varEN"
+stop=true
+elseif par2 > 0 and par2 <= 12 and par3 == 4 then
+sets.lang="varDE"
+langu="sys/varDE"
+stop=true
+elseif par2 > 0 and par2 <= 11 and par3 == 4 then
+sets.lang="varPL"
+langu="sys/varPL"
+stop=true
+elseif par2 > 0 and par2 <= 10 and par3 == 4 then
+sets.lang="varDN"
+langu="sys/varDN"
+stop=true
+elseif par2 > 0 and par2 <= 10 and par3 == 5 then
+sets.lang="varCZ"
+langu="sys/varCZ"
+stop=true
+end
+elseif event == "chat_command" then
+if char=="1" then
+sets.lang="varEN"
+langu="sys/varEN"
+stop=true
+elseif char=="3" then
+sets.lang="varPL"
+langu="sys/varPL"
+stop = true
+elseif char=="5" then
+sets.lang="varCZ"
+langu="sys/varCZ"
+stop = true
+elseif char=="2" then
+sets.lang="varDE"
+langu="sys/varDE"
+stop = true
+elseif char=="4" then
+sets.lang="varDN"
+langu="sys/varDN"
+stop = true
+end
+end
+end
+data=textutils.serialize(sets)
+file=fs.open("sys/config","w")
+file.write(data)
+file:close()
+shell.run(langu)

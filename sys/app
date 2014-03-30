@@ -1,0 +1,242 @@
+if bGlass then
+bTempGlass=true
+bGlass=false
+end
+function invert(var)
+if var==false then var=true else var=false end
+return var
+end
+term.setBackgroundColor(2^15)
+term.clear()
+if cApp == nil then
+cApp=1
+end
+w, h=term.getSize()
+function getDate(days)
+local day={var77,var78,var79,var80,var81,var82,var83}
+dNum=(days-math.floor(days/7)*7)+1
+dayName=day[dNum]
+local function isLeapYear(year)
+return year % 4 == 0 and (year % 100 > 0 or year % 400 == 0)
+end
+local function daysInYear(year)
+if isLeapYear(year) then
+return 366
+end
+return 365
+end 
+local year=0
+local mon=1
+while days >= daysInYear(year) do
+days=days - daysInYear(year);
+year=year + 1;
+end
+local _temp={ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+if isLeapYear(year) then
+_temp[2]=29
+end
+while days >= _temp[mon] do
+days=days - _temp[mon];
+mon=mon + 1;
+end
+local _mon={var84,var85,var86,var87,var88,var89,var90,var91,var92,var93,var94,var95}
+mon=_mon[mon]
+return year,mon,days+1,dayName
+end
+year,mon,days=getDate(os.day())
+print(mon,".",days,". ",year)
+function drawApp()
+term.setTextColor(2^15)
+term.setBackgroundColor(1)
+term.clear()
+term.setCursorPos(1,h/2+1)
+print("<")
+term.setCursorPos(w,h/2+1)
+print(">")
+if cApp == 1 then
+cImg=paintutils.loadImage("sys/images/message")
+Mvar=var99
+elseif cApp == 2 then
+cImg=paintutils.loadImage("sys/images/textedit")
+Mvar=var101
+elseif cApp == 3 then
+cImg=paintutils.loadImage("sys/images/shell")
+Mvar=var133
+elseif cApp == 4 then
+cImg=paintutils.loadImage("sys/images/calculator")
+Mvar=var102
+elseif cApp == 5 then
+cImg=paintutils.loadImage("sys/images/weather")
+Mvar=var150
+elseif cApp == 6 then
+Mvar=var103
+end
+if cApp>0 and cApp<6 then
+paintutils.drawImage(cImg,2,3)
+paintutils.drawLine((w-#Mvar)/2, 1,(w+#Mvar)/2,1, 256)
+term.setCursorPos((w-#Mvar)/2, 1)
+term.setBackgroundColor(256)
+term.setTextColor(1)
+print(Mvar)
+else
+paintutils.drawLine((w-#Mvar)/2, 1,(w+#Mvar)/2,1, 256)
+term.setCursorPos((w-#Mvar)/2, 1)
+term.setBackgroundColor(256)
+term.setTextColor(1)
+print(Mvar)
+term.setBackgroundColor(1)
+year,mon,day,dName,dNum,nMon=getDate(os.day())
+local code = {["113"]=w1,["116"]=w2,["119"]=w3,["122"]=w4,["143"]=w5,["176"]=w6,["179"]=w7,["182"]=w8,["185"]=w9,["200"]=w10,["227"]=w11,["230"]=w12,["248"]=w13,["260"]=w14,["263"]=w15,["266"]=w16,["281"]=w17,["284"]=w18,["293"]=w19,["296"]=w20,["299"]=w21,["302"]=w22,["305"]=w23,["308"]=w24,["311"]=w25,["314"]=w26,["317"]=w27,["320"]=w28,["323"]=w29,["326"]=w30,["329"]=w31,["332"]=w32,["335"]=w33,["338"]=w34,["350"]=w35,["353"]=w36,["356"]=w37,["359"]=w38,["362"]=w39,["365"]=w40,["368"]=w41,["371"]=w42,["374"]=w43,["377"]=w44,["386"]=w45,["389"]=w46,["392"]=w47,["395"]=w47}
+wTData=http.get("http://api.worldweatheronline.com/free/v1/weather.ashx?q="..city.."&format=xml&num_of_days=1&key=yzz7n8unxjwjvpxqzdmj77nc")
+if wTData then
+wData=wTData.readAll()
+if wData:find("<error>") then
+errorMsg = wData:match("<msg>(.+)</msg")
+failed = true
+l=7
+else
+failed = false
+l=10
+end
+for i=1,l do paintutils.drawLine(4,2+i,w-4,2+i,128) end
+term.setTextColor(1)
+cWeather = wData:match("<current_condition>.+<weatherDesc><!%[CDATA%[([^>]+)%]%]></weatherDesc>.+</current_condition>")
+tWeather = wData:match("<weather>.+<weatherDesc><!%[CDATA%[([^>]+)%]%]></weatherDesc>.+</weather>")
+cCode = wData:match("<weatherCode>(%d+)</weatherCode>")
+tCode = wData:match("</winddirDegree><weatherCode>(%d+)</weatherCode>")
+curWeather = code[cCode]
+toWeather=code[tCode]
+if lan==" English" or curWeather==nil then curWeather=cWeather end
+if lan==" English" or toWeather==nil then toWeather=tWeather end
+if celsius then
+cTemp = wData:match("<temp_C>(.+)</temp_C>")
+mTemp = wData:match("<tempMaxC>(.+)</tempMaxC>")
+lowTemp = wData:match("<tempMinC>(.+)</tempMinC>")
+u=" C"
+else
+cTemp = wData:match("<temp_F>(.+)</temp_F>")
+mTemp = wData:match("<tempMaxF>(.+)</tempMaxF>")
+lowTemp = wData:match("<tempMinF>(.+)</tempMinF>")
+u=" F"
+end
+end
+term.setCursorPos(w-12,4) term.setBackgroundColor(32) print(textutils.formatTime(os.time(),invert(tFormat)))
+term.setCursorPos(5,4)
+term.setTextColor(1)
+term.setBackgroundColor(256)
+print(" ",var104," ",year," ")
+term.setBackgroundColor(2^14)
+term.setCursorPos(5,6)
+print(" ",dName," ")
+term.setCursorPos(5,7)
+print(" ",day,".",mon," ")
+if not failed then
+term.setBackgroundColor(256)
+term.setCursorPos(5,10)
+print(" ",curWeather,var166,cTemp,u)
+term.setCursorPos(5,11)
+print(var167,toWeather:lower(),", ",lowTemp,var168,mTemp,u)
+end
+os.startTimer(60/72)
+end
+end
+stop=false
+drawApp()
+while not stop do
+event,char, par2, par3=os.pullEvent()
+if event == "key" and char == 203 then
+cApp=cApp-1
+if cApp <= 0 then
+cApp=6
+end
+drawApp()
+elseif event == "key" and char == 205 then
+cApp=cApp+1
+if cApp >= 7 then
+cApp=1
+end
+drawApp()
+elseif event == "key" and char == 208 then
+if bTempGlass then
+bTempGlass=nil
+bGlass=true
+end
+shell.run("sys/loggedin")
+elseif event == "key" and char == 200 then
+if bTempGlass then
+bTempGlass=nil
+bGlass=true
+end
+shell.run("sys/loggedin")
+elseif event == "timer" and cApp==6 then
+paintutils.drawLine(w-13,3,w-5,3,128)
+term.setCursorPos(w-12,4) term.setBackgroundColor(32) print(textutils.formatTime(os.time(),invert(tFormat))) os.startTimer(60/72)
+elseif event == "key" and char == 28 then
+if cApp == 1 then
+shell.run("sys/apps/messages")
+elseif cApp == 2 then
+shell.run("sys/apps/textedit")
+elseif cApp == 3 then
+if slevel == 1 then
+last="sys/loggedin"
+term.setBackgroundColor(2^15)
+shell.run("rom/programs/clear")
+shell.run("rom/programs/shell")
+drawApp()
+end
+elseif cApp == 4 then
+shell.run("sys/apps/calculator")
+elseif cApp == 5 then
+shell.run("sys/apps/weather", city)
+end
+elseif event == "monitor_touch" or event == "mouse_click" then
+if par2 >= 3 and par2 <= w-2 and par3 >= 3 and par3 <= h-2 then
+if cApp == 1 then
+shell.run("sys/apps/messages")
+elseif cApp == 2 then
+shell.run("sys/apps/textedit")
+elseif cApp == 3 then
+if slevel == 1 then
+last="sys/loggedin"
+term.setBackgroundColor(2^15)
+shell.run("rom/programs/clear")
+shell.run("rom/programs/shell")
+drawApp()
+else
+term.setBackgroundColor(topColor)
+term.clear()
+term.setCursorPos(1,1)
+print("")
+print("")
+term.setTextColor(barva)
+print(error23)
+print(key1)
+local event=os.pullEvent("key")
+if event then
+shell.run("sys/app")
+end
+end
+elseif cApp == 4 then
+shell.run("sys/apps/calculator")
+elseif cApp == 5 then
+shell.run("sys/apps/weather", city)
+elseif cApp == 6 then
+drawApp()
+end
+elseif par2 <= 2 then
+cApp=cApp-1
+if cApp <= 0 then
+cApp=6
+end
+drawApp()
+elseif par2 >= w-1 then
+cApp=cApp+1
+if cApp >= 7 then
+cApp=1
+end
+drawApp()
+elseif par3 <= 2 or par3 >= h-1 then
+shell.run("sys/loggedin")
+end
+end
+end

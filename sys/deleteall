@@ -1,0 +1,74 @@
+paintutils.drawLine(9, 3, 45, 3, 2^15)
+paintutils.drawLine(45, 3, 45, 9, 2^15)
+paintutils.drawLine(8, 4, 44, 4, topColor)
+paintutils.drawLine(8, 5, 44, 5, topColor)
+paintutils.drawLine(8, 6, 44, 6, topColor)
+paintutils.drawLine(8, 7, 44, 7, topColor)
+paintutils.drawLine(8, 8, 44, 8, topColor)
+paintutils.drawLine(8, 9, 44, 9, topColor)
+paintutils.drawLine(8, 10, 44, 10, topColor)
+if topColor == 16384 then
+paintutils.drawPixel(39,10,128)
+paintutils.drawPixel(40,10,16384)
+paintutils.drawPixel(41,10,1)
+paintutils.drawPixel(42,10,256)
+paintutils.drawPixel(43,10,512)
+else
+paintutils.drawPixel(40,10,128)
+paintutils.drawPixel(39,10,16384)
+paintutils.drawPixel(41,10,1)
+paintutils.drawPixel(42,10,256)
+paintutils.drawPixel(43,10,512)
+end
+term.setBackgroundColor(topColor)
+term.setTextColor(barva)
+os.pullEvent = os.pullEventRaw
+term.setCursorPos((w-#var73)/2,4)
+print(var73)
+term.setCursorPos(9,6)
+print(var74)
+term.setCursorPos(9,7)
+print("")
+term.setCursorPos(9,8)
+print(var71)
+term.setCursorPos(9,9)
+print(var72)
+term.setCursorPos(9,10)
+print("")
+stop = false
+event, char, par2, par3 = os.pullEvent("key")
+while not stop do
+if event == "key" and char == 2 or char == 79 then
+fs.delete("db")
+fs.delete("startup")
+fs.delete("sys")
+fs.delete("files")
+fs.delete("edit")
+fs.delete("copy")
+fs.delete("delete")
+os.sleep(1)
+print(var75)
+os.sleep(1)
+stop = true
+os.reboot()
+elseif event == "key" and char == 3 or char == 80 then
+stop=true
+shell.run("sys/ap")
+end
+if event == "chat_message" and char=="1" then
+fs.delete("db")
+fs.delete("startup")
+fs.delete("sys")
+fs.delete("files")
+fs.delete("edit")
+fs.delete("copy")
+fs.delete("delete")
+os.sleep(1)
+print(var75)
+os.sleep(1)
+stop = true
+os.reboot()
+elseif event == "chat_message" and char=="2" then
+shell.run("sys/ap")
+end
+end

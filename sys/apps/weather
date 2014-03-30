@@ -1,0 +1,155 @@
+local tArgs = {...}
+if #tArgs>1 then
+city=tArgs[1]
+end
+local code = {["113"]=w1,["116"]=w2,["119"]=w3,["122"]=w4,["143"]=w5,["176"]=w6,["179"]=w7,["182"]=w8,["185"]=w9,["200"]=w10,["227"]=w11,["230"]=w12,["248"]=w13,["260"]=w14,["263"]=w15,["266"]=w16,["281"]=w17,["284"]=w18,["293"]=w19,["296"]=w20,["299"]=w21,["302"]=w22,["305"]=w23,["308"]=w24,["311"]=w25,["314"]=w26,["317"]=w27,["320"]=w28,["323"]=w29,["326"]=w30,["329"]=w31,["332"]=w32,["335"]=w33,["338"]=w34,["350"]=w35,["353"]=w36,["356"]=w37,["359"]=w38,["362"]=w39,["365"]=w40,["368"]=w41,["371"]=w42,["374"]=w43,["377"]=w44,["386"]=w45,["389"]=w46,["392"]=w47,["395"]=w47}
+local wTData
+if http then
+drawMenu(var150)
+print("")
+if bGlass then glass.clear() end
+wTData=http.get("http://api.worldweatheronline.com/free/v1/weather.ashx?q="..city.."&format=xml&num_of_days=1&key=yzz7n8unxjwjvpxqzdmj77nc")
+if wTData then
+wData=wTData.readAll()
+if wData:find("<error>") then
+errorMsg = wData:match("<msg>(.+)</msg")
+failed = true
+else
+failed = false
+end
+local city, country = wData:match("<query>(.+), (.+)</query>")
+local pressure = wData:match("<pressure>(.+)</pressure")
+local humidity = wData:match("<humidity>(.+)</humidity")
+local clouds = wData:match("<cloudcover>(.+)</cloudcover")
+local cWeather = wData:match("<current_condition>.+<weatherDesc><!%[CDATA%[([^>]+)%]%]></weatherDesc>.+</current_condition>")
+local cCode = wData:match("<weatherCode>(%d+)</weatherCode>")
+local curWeather = code[cCode]
+if lan==" English" or curWeather==nil then curWeather=cWeather end
+if celsius then
+cTemp = wData:match("<temp_C>(.+)</temp_C>")
+mTemp = wData:match("<tempMaxC>(.+)</tempMaxC>")
+lowTemp = wData:match("<tempMinC>(.+)</tempMinC>")
+u=" C"
+else
+cTemp = wData:match("<temp_F>(.+)</temp_F>")
+mTemp = wData:match("<tempMaxF>(.+)</tempMaxF>")
+lowTemp = wData:match("<tempMinF>(.+)</tempMinF>")
+u=" F"
+end
+if not failed then
+if clr then drawMenu(var150) print() end
+print(var151..city)
+print(" "..curWeather)
+print(var152..cTemp..u)
+print(var153..lowTemp.." - "..mTemp..u)
+print(var154..pressure.." mbar")
+print(var155..humidity.."%")
+print(var156..clouds.."%")
+end
+print()
+print(var157)
+print(var158)
+print(var22)
+if bGlass and not failed then
+glass.clear()
+bg=glass.addBox(3,3,90,138,gray,0.5)
+local a=(bg.getWidth()/5)
+local lg={}
+local clr={[1]=gray,[2]=red,[3]=white,[4]=lGray,[5]=cyan}
+lg[0]=glass.addBox(-a+3,0,a,0,red,0)
+for l=1,5 do
+lg[l]=glass.addBox(lg[l-1].getX()+a,141,a,1,clr[l],1)
+lg[l].setZ(1)
+end
+cityText=glass.addprint(3,13,city,white)
+cityText.setScale(1.5)
+cityText.setZ(2)
+cityText.setX(93/2-#cityText.getprint()*cityText.getScale()*2)
+status=glass.addprint(3,28,curWeather,white)
+status.setScale(0.85)
+status.setZ(2)
+status.setX(93/2-#status.getprint()*status.getScale()*2)
+tempText=glass.addprint(3,38,cTemp,white)
+tempText.setScale(3)
+tempText.setZ(2)
+tempText.setX(93/2-#tempText.getprint()*tempText.getScale()*2)
+degSymbol=glass.addprint(tempText.getX()+(#tempText.getprint()*tempText.getScale()*6),36,"o",white)
+degSymbol.setZ(2)
+d1=glass.addBox(3,83,90,1,white,1)
+d1.setZ(1)
+lTemp=glass.addprint(3,73,lowTemp,white)
+lTemp.setZ(2)
+lTemp.setScale(1)
+lTemp.setX(89-#lTemp.getprint()*lTemp.getScale()*4)
+hTemp=glass.addprint(3,73,mTemp.."-",white)
+hTemp.setZ(2)
+hTemp.setScale(1)
+hTemp.setX(89-#hTemp.getprint()*hTemp.getScale()*8-#lTemp.getprint()*lTemp.getScale()*2)
+nLine=10
+clouds=glass.addprint(3,88,var156..clouds.."%",white)
+clouds.setZ(2)
+clouds.setScale(0.7)
+hum=glass.addprint(3,98,var155..humidity.."%",white)
+hum.setZ(2)
+hum.setScale(0.7)
+press=glass.addprint(3,108,var154..pressure.." mbar",white)
+press.setZ(2)
+press.setScale(0.7)
+src=glass.addprint(3,130," Src: worldweatheronline.com",lGray)
+src.setZ(2)
+src.setScale(0.5)
+end
+local isAdvanced = term.isColor and term.isColor() 
+if isAdvanced then
+term.setCursorPos(1,h-2)
+term.setTextColor(256)
+print(" Src: worldweatheronline.com")
+term.setCursorPos(1,14)
+else
+print()
+print(" Src: worldweatheronline.com")
+term.setCursorPos(1,14)
+end
+else
+print(errorMsg)
+end
+else
+print(error24)
+end
+stop = false
+while not stop do
+event, char, par2, par3 = os.pullEvent()
+if event == "key" and char == 2 or char == 79 then
+stop = true
+shell.run("sys/apps/weather", city)
+end
+if event == "key" and char == 3 or char == 80 then
+term.setCursorPos(1,10)
+write(var6)
+city=nil
+os.sleep(.001)
+city = read()
+stop = true
+shell.run("sys/apps/weather",city)
+end
+if event == "key" and char == 4 or char == 81 then
+stop = true
+shell.run("sys/app")
+end
+if event == "monitor_touch" or event == "mouse_click" then
+click(1,11,#var157,11,"sys/apps/weather",city)
+if par2>=1 and par2<=#var158 and par3==12 then
+term.setCursorPos(1,10)
+write(var6)
+city=nil
+os.sleep(.001)
+city = read()
+stop = true
+shell.run("sys/apps/weather",city)
+end
+click(1,12,#var22,13,"sys/app")
+end
+end
+city=sets["city"]
+stop=true
+shell.run("sys/apps/weather")

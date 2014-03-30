@@ -1,0 +1,53 @@
+function acc()
+event = os.pullEvent()
+if event=="key" or event=="mouse_click" then
+shell.run("sys/strtup")
+end
+end
+os.pullEvent = os.pullEventRaw
+function error()
+event = os.pullEvent()
+if event then
+shell.run("sys/strtup")
+end
+end
+local event
+sleep(0.1)
+drawMenu(var4)
+print(var5)
+print("")
+print(var6)
+print("")
+print(var7)
+print("")
+term.setCursorPos(#var6,4)
+rname = read()
+if rname==var110 then
+shell.run("sys/strtup")
+end
+term.setCursorPos(#var7,6)
+rpass = read("*")
+if fs.exists("db/users/pass/"..rname) then
+term.setCursorPos(1,7) 
+print(error1)
+print(key1)
+error()
+else
+if fs.exists("db/users/blocked/"..rname) then
+term.setCursorPos(1,7)
+print(error2)
+print(key1)
+error()
+else
+file=fs.open("db/users/pass/"..rname,"w")
+file.write(rpass)
+file : close()
+file=fs.open("db/users/level/"..rname,"w")
+file.write('0')
+file : close()
+term.setCursorPos(1,5)
+print(var8)
+os.sleep(0.6)
+shell.run("sys/login")
+end
+end

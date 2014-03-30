@@ -1,0 +1,59 @@
+function error()
+event = os.pullEvent("key")
+os.pullEvent = os.pullEventRaw
+if event then
+shell.run("sys/login")
+end
+end
+sleep(0.1)
+drawMenu(var9)
+print("")
+term.setCursorPos((w-#var6)/2,4)
+print(var6)
+paintutils.drawLine((w-15)/2,5,(w+14)/2,5,topColor)
+term.setCursorPos((w-#var7)/2,6)
+term.setBackgroundColor(bgColor)
+print(var7)
+paintutils.drawLine((w-15)/2,7,(w+14)/2,7,topColor)
+term.setCursorPos(1,h-1)
+term.setBackgroundColor(bgColor)
+print(var5)
+term.setCursorPos((w-13)/2,5)
+term.setBackgroundColor(topColor)
+lname = read()
+if lname == var110 then
+shell.run("sys/strtup")
+end
+term.setCursorPos((w-13)/2,7)
+lpass = read("*")
+term.setBackgroundColor(bgColor)
+local event
+if fs.exists("db/users/pass/"..lname) then
+ if fs.exists("db/users/blocked/"..lname) then
+ term.setCursorPos(1,9)
+  print(error2)
+  print(key1)
+  error()
+ else
+  file=io.open("db/users/pass/"..lname,"r")
+  gpass = file : read()
+  file : close()
+   if gpass == lpass then
+   file=io.open("sys/session","w")
+   file:write(lname)
+   file : close()
+   shell.run("sys/loggedin")
+   else
+   term.setCursorPos(1,9)
+   print(error3)
+   os.sleep(1)
+   shell.run("sys/login")
+   error()
+  end
+end
+else
+term.setCursorPos(1,9)
+print(error4)
+print(key1)
+error()
+end

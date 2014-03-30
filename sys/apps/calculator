@@ -1,0 +1,25 @@
+sleep(.001)
+os.pullEvent = os.pullEventRaw
+drawMenu(var107)
+term.setTextColor(barva)
+print("")
+print(var109)
+print(var5)
+write(" ")
+msg = io.read()
+if msg == var110 then
+shell.run("sys/app")
+else
+ local banned = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x","y", "z"}
+local formula = msg:sub(1, -1):lower()
+for k,v in pairs(banned) do
+        formula = formula:gsub(v, "")
+end
+local func = loadstring("return " .. formula)
+local r, resp = pcall(func)
+if r and ((type(resp) == "number") or (type(resp) == "string")) then
+       print(var108..resp)
+else
+	   print(error13)
+end
+end

@@ -1,0 +1,44 @@
+function peripheral.find( sType, fnFilter )
+    if type( sType ) ~= "string" or (fnFilter ~= nil and type( fnFilter ) ~= "function") then
+        error( "Expected string, [function]", 2 )
+    end
+	local tResults = {}
+	for n,sName in ipairs( peripheral.getNames() ) do
+		if peripheral.getType( sName ) == sType then
+			local wrapped = peripheral.wrap( sName )
+			if fnFilter == nil or fnFilter( sName, wrapped ) then
+				table.insert( tResults, wrapped )
+			end
+		end
+	end
+	return unpack( tResults )
+end
+w, h = term.getSize()
+if barva == 2^15 then
+dCol = colors.lightGray
+else
+dCol = barva
+end
+term.setBackgroundColor(colors.white)
+term.clear()
+logo = {}
+logo[1] = paintutils.loadImage("sys/RedlogoBegin")
+logo[2] = paintutils.loadImage("sys/RedlogoC1")
+logo[3] = paintutils.loadImage("sys/RedlogoC2")
+logo[4] = paintutils.loadImage("sys/RedlogoC3")
+logo[5] = paintutils.loadImage("sys/RedlogoC4")
+logo[6] = paintutils.loadImage("sys/RedlogoComplete")
+paintutils.drawImage(logo[1], (w-20)/2, (h-13.5)/2)
+prw = (w-18)/2
+prh = (h+10)/2
+for i=1,15 do
+os.sleep(math.random(0.01,0.08))
+paintutils.drawLine(prw+i-1 ,prh ,prw+i-1 ,prh-1 , dCol)
+end
+for i=1,5 do
+paintutils.drawImage(logo[i], (w-20)/2, (h-13.5)/2)
+paintutils.drawLine(prw ,prh-1 ,prw+14 ,prh-1 , dCol)
+paintutils.drawLine(prw ,prh ,prw+14 ,prh , dCol)
+os.sleep(math.random(0.01,0.08))
+end
+shell.run("sys/strtup")

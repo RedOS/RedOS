@@ -1,0 +1,181 @@
+sd=true
+while sd==true do
+os.pullEvent = os.pullEventRaw
+local drive
+drive=peripheral.find("drive")
+if drive == nil then
+drive=false
+end
+if not http then
+httpE = var49
+else
+httpE = var50
+end
+function getSize(path)
+  local size = 0
+  for _, file in ipairs(fs.list(path)) do
+    if fs.isDir(fs.combine(path, file)) then
+      --# if it is a directory, recurse.
+      size = size + getSize(fs.combine(path, file))
+    else
+      size = size + fs.getSize(fs.combine(path, file))
+    end
+  end
+  return size
+end
+fs.getSpaceLimit = function(_path, _space, _final)
+local final = true
+if(_final ~= nil) then
+final = _final
+end 
+local space = 0
+if(_space ~= nil) then
+space = _space
+end
+local sDir = ""
+if _path ~= nil then sDir = _path end
+local tContent = fs.list( sDir )
+for i, j in pairs( tContent ) do
+local sPath = fs.combine( sDir, j )
+if fs.isDir( sPath ) then
+if(sPath ~= "rom") then
+space = space + 512
+space = fs.getSpaceLimit(sPath, space, false)
+end
+else
+space = space + fs.getSize(sPath)
+end 
+end
+if(final == true) then
+return space + fs.getFreeSpace(_path)
+else
+return space
+end
+end
+function getSpace(number,round)
+if number<1024 then
+unit=" B"
+else
+local units={" kB"," MB"," GB"," TB"," PB"}
+for i=0,5 do
+if number/1024^i < 1024 then
+number= number/1024^i
+unit=units[i]
+break
+end
+end
+if round==true then
+number=tostring(number)
+num, dNum = number:match("(%d+).(%d)")
+dNum=tonumber(dNum)
+if dNum>=5 then number=math.ceil(number) else number=math.floor(number).."."..dNum end
+end
+end
+return number, unit
+end
+sp=fs.getSpaceLimit("/")
+sf=fs.getFreeSpace("/")
+if sf=="unlimited" then
+spaceFree=var124
+spaceTotal=var124
+vl=""
+sz=""
+percentage=100
+else
+spaceFree,vl=getSpace(sf,false)
+spaceTotal,sz=getSpace(sp,true)
+spaceFree=tostring(spaceFree)
+if spaceFree:find(".") then
+num, fN,sN = spaceFree:match("(%d+).(%d)(%d)")
+spaceFree = num.."."..fN..sN
+spaceFree=tonumber(spaceFree)
+end
+end
+if drive and drive.isDiskPresent() then
+dT=fs.getSpaceLimit("disk")
+dF=fs.getFreeSpace("/disk")
+if fs.getFreeSpace("/disk")=="unlimited" then
+diskFree=var124
+diskTotal=var124
+dta=""
+dt=""
+perc=100
+else
+diskTotal,dta=getSpace(dT,true)
+diskFree,dt= getSpace(dF,true)
+perc=math.ceil((dF/dT)*100)
+end
+end
+drawMenu(var48)
+print("")
+print(var129)
+if not vFile then
+vFile=http.get("https://dl.dropboxusercontent.com/u/52196276/versions")
+if vFile then
+recBuild=vFile.readLine()
+vFile:close()
+else
+rVer="Unknown"
+end
+end
+if recBuild==version then
+isupdate=var128
+else
+isupdate=var127
+end
+local label = os.getComputerLabel()
+term.clear()
+drawMenu(var48)
+print("")
+percentage=math.ceil((sf/sp)*100)
+term.setBackgroundColor(bgColor)
+term.setCursorPos(1,3)
+print(var51..httpE)
+print(var52..version)
+print(var126..isupdate.." ("..recBuild..")")
+print(var98..lan)
+print(var53..sname)
+print(" "..spaceFree..vl.."/"..spaceTotal..sz.." ("..percentage.."%) "..var117)
+if drive and drive.isDiskPresent() then
+print(" Disk: "..diskFree..dta.."/"..diskTotal..dt.." ("..perc.."%) "..var117)
+end
+print(" "..var122.." "..var121..os.getComputerID())
+if label then
+print(var148..label)
+end
+if turtle then
+print(var149..turtle.getFuelLevel())
+end
+print("")
+print(key1)
+print("")
+term.setCursorPos(4+(w/4)*0,h-1)
+print("System")
+term.setCursorPos(4+(w/4)*1,h-1)
+print("Files")
+term.setCursorPos(4+(w/4)*2,h-1)
+print("Other")
+term.setCursorPos(4+(w/4)*3,h-1)
+print("Free")
+paintutils.drawPixel(2+(w/4)*0,h-1,128)
+paintutils.drawPixel(2+(w/4)*1,h-1,32)
+paintutils.drawPixel(2+(w/4)*2,h-1,512)
+paintutils.drawPixel(2+(w/4)*3,h-1,256)
+fS=getSize("files")
+dS=getSize("db")
+sS=getSize("sys")
+local len=2
+paintutils.drawLine(2,h-3,w-1,h-3,256)
+paintutils.drawLine(len,h-3,len+((sS+dS)/sp)*w,h-3,128)
+len=math.ceil(((sS+dS)/sp)*w)+len
+paintutils.drawLine(len,h-3,len+(fS/sp)*w,h-3,32)
+len=len+math.ceil((fS/sp)*w)
+paintutils.drawLine(len,h-3,(((sp-sf)-(sS+dS+fS))/sp)+len,h-3,512)
+event, char, par2, par3 = os.pullEvent()
+if event == "key" or event == "monitor_touch" or event == "mouse_click" then
+sd=nil
+shell.run("sys/loggedin")
+end
+end
+sd=nil
+shell.run("sys/sd")

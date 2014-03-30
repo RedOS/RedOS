@@ -1,0 +1,162 @@
+function invert(var)
+if var==false then var=true else var=false end
+return var
+end
+function status(var)
+if var==true then
+return var128
+else
+return var127
+end
+end
+oldLang=lang
+tLang = {"English","Deutsch","Polski","Dansk","Cesky"}
+if lan==" English" then
+nLan=1
+elseif lan==" Polski" then
+nLan=3
+elseif lan==" Deutsch" then
+nLan=2
+elseif lan==" Cesky" then
+nLan=5
+elseif lan==" Dansk" then
+nLan=4
+end
+drawMenu(var58)
+print("")
+print(var161)
+print(var162)
+print(var163)
+print(var164)
+print(var165)
+term.setCursorPos(3,h-1)
+term.setBackgroundColor(8192)
+print(" ",var159," ")
+term.setCursorPos(12,h-1)
+term.setBackgroundColor(2^14)
+print(" ",var160," ")
+term.setBackgroundColor(1)
+term.setCursorPos(20,6)
+write("< ")
+term.setBackgroundColor(barva)
+write("   ")
+term.setBackgroundColor(1)
+write(" >")
+term.setCursorPos(20,3)
+if tFormat==true then
+term.setBackgroundColor(32)
+else
+term.setBackgroundColor(2^14)
+end
+print(" ",status(tFormat)," ")
+term.setCursorPos(20,4)
+if celsius==true then
+term.setBackgroundColor(32)
+else
+term.setBackgroundColor(2^14)
+end
+print(" ",status(celsius)," ")
+term.setBackgroundColor(1)
+term.setCursorPos(20,5)
+print("<",lan," >")
+term.setCursorPos(20,7)
+term.setBackgroundColor(256)
+print("  ",city,"  ")
+stop=false
+while not stop do
+event, char, par2, par3 = os.pullEvent("mouse_click")
+if par3==3 then
+tFormat=invert(tFormat)
+paintutils.drawLine(20,3,30,3,1)
+if tFormat==true then
+term.setBackgroundColor(32)
+else
+term.setBackgroundColor(2^14)
+end
+term.setCursorPos(20,3)
+print(" ",status(tFormat)," ")
+elseif par3==4 then
+celsius=invert(celsius)
+paintutils.drawLine(20,4,30,4,1)
+if celsius==true then
+term.setBackgroundColor(32)
+else
+term.setBackgroundColor(2^14)
+end
+term.setCursorPos(20,4)
+print(" ",status(celsius)," ")
+elseif par3==5 then
+nLan=nLan+1
+if nLan>5 then
+nLan=1
+end
+sLan=tLang[nLan]
+paintutils.drawLine(20,5,30,5,1)
+term.setCursorPos(20,5)
+print("< ",sLan," >")
+if sLan=="English" then
+lang="varEN"
+elseif sLan=="Deutsch" then
+lang="varDE"
+elseif sLan=="Polski" then
+lang="varPL"
+elseif sLan=="Dansk" then
+lang="varDN"
+elseif sLan=="Cesky" then
+lang="varCZ"
+end
+elseif par3==6 then
+if par2<22 then
+if barva==1 then
+barva=2^15
+end
+barva=barva/2
+else
+if barva==2^15 then
+barva=1
+end
+barva=barva*2
+end
+term.setBackgroundColor(barva)
+term.setCursorPos(22,6)
+print("   ")
+term.setBackgroundColor(1)
+elseif par3==7 then
+paintutils.drawLine(20,7,23+#city,7,256)
+term.setCursorPos(20,7)
+city=read()
+term.setCursorPos(20,7)
+print("  ",city,"  ")
+term.setBackgroundColor(1)
+elseif par3==h-1 then
+if par2>=3 and par2<=3+#var159 then
+f=fs.open("sys/config","r")
+data=f.readAll()
+f.close()
+sets=textutils.unserialize(data)
+sets["city"]=city
+sets["tempUnit"]=celsius
+sets["tFormat"]=tFormat
+sets["lang"]=lang
+sets["textColor"]=barva
+celsius=celsius
+data=textutils.serialize(sets)
+f=fs.open("sys/config","w")
+f.write(data)
+f.close()
+last="sys/loggedin"
+shell.run("sys/"..lang)
+elseif par2>=12 and par2<=12+#var160 then
+f=fs.open("sys/config","r")
+data = f.readAll()
+f.close()
+sets=textutils.unserialize(data)
+barva=sets["textColor"]
+lang=sets["lang"]
+celsius=sets["tempUnit"]
+tFormat=sets["tFormat"]
+city=sets["city"]
+shell.run("sys/loggedin")
+end
+end
+end

@@ -1,0 +1,54 @@
+function error()
+event = os.pullEvent()
+if event == "char" or event == "key" or event == "mouse_scroll" or event == "mouse_click" then
+shell.run("ap_cl")
+end
+end
+file=io.open("sys/session","r")
+cname = file : read()
+file : close()
+file=io.open("db/users/level/"..cname,"r")
+clevel = file : read()
+file : close()
+sleep(.001)
+drawMenu(var60)
+text("")
+text(var6)
+text(var61)
+text("")
+text(var62)
+text(var63)
+text("")
+term.setCursorPos(7,3)
+tname = read()
+term.setCursorPos(15,4)
+slevel = read()
+term.setCursorPos(1,8)
+if fs.exists("db/users/pass/"..tname) then
+ if tname == cname then
+ text(error8)
+ text(key1)
+ os.sleep(1)
+ shell.run("sys/ap")
+ error()
+ else
+  if slevel>clevel then
+  text(error9)
+  text(key1)
+ os.sleep(1)
+ shell.run("sys/ap")  
+  error()
+  else
+  file=fs.open("db/users/level/"..tname,"w")
+  file.write(slevel)
+  file : close()
+  shell.run("sys/ap")
+  end
+ end
+ else
+ text(error4)
+ text(key1)
+ os.sleep(1)
+ shell.run("sys/loggedin")
+ error()
+end

@@ -1,0 +1,65 @@
+file=fs.open("sys/config","r")
+data = file.readAll()
+file:close()
+sets=textutils.unserialize(data)
+drawMenu(var76)
+	term.setTextColor(colors.orange)
+	print(c1)
+	term.setTextColor(colors.red)
+	print(c2)
+	term.setTextColor(2^15)
+	print(c3)
+	term.setTextColor(colors.lightBlue)
+	print(c4)
+	term.setTextColor(colors.yellow)
+	print(c5)
+	term.setTextColor(colors.purple)
+	print(c6)
+	term.setTextColor(colors.pink)
+	print(c7)
+	term.setTextColor(colors.lime)
+	print(c8)
+	term.setTextColor(colors.lightBlue)
+	stop = false
+while not stop do
+	event, char = os.pullEvent("key")
+if event == "key" and char == 24 then
+	stop=true
+	barva=colors.orange
+	sets.textColor=barva
+elseif event == "key" and char == 46 then
+	stop=true
+	barva=colors.red
+	sets.textColor=barva
+elseif event == "key" and char == 48 then
+	stop=true
+	barva=2^15
+	sets.textColor=barva
+elseif event == "key" and char == 20 then
+	stop=true
+	barva=colors.lightBlue
+	sets.textColor=barva
+elseif event == "key" and char == 21 then
+	stop=true
+	barva=colors.yellow
+	sets.textColor=barva
+elseif event == "key" and char == 33 then
+	stop=true
+	barva=colors.purple
+	sets.textColor=barva
+elseif event == "key" and char == 19 then
+	stop=true
+	barva=colors.pink
+	sets.textColor=barva
+elseif event == "key" and char == 38 then
+	stop=true
+	barva=colors.lime
+	sets.textColor=barva
+end
+end
+color = nil
+data=textutils.serialize(sets)
+file=fs.open("sys/config","w")
+file.write(data)
+file:close()
+shell.run("sys/settings")

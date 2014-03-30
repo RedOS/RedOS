@@ -1,0 +1,44 @@
+sleep(.001)
+function error()
+event = os.pullEvent()
+if event == "char" or event == "key" or event == "mouse_scroll" or event == "mouse_click" then
+shell.run("sys/ucp_cp")
+end
+end
+drawMenu(var37)
+print("")
+term.setBackgroundColor(colors.white)
+print(var38)
+print(var39)
+print(var40)
+print("")
+file=io.open("sys/session","r")
+sname = file : read()
+file : close()
+file=io.open("db/users/pass/"..sname,"r")
+cpass = file : read()
+file : close()
+term.setCursorPos(16,3)
+cupass = read("*")
+term.setCursorPos(13,4)
+anpass = read("*")
+term.setCursorPos(19,5)
+bnpass = read("*")
+if cupass == cpass then
+ if anpass == bnpass then
+  file=io.open("db/users/pass/"..sname,"w")
+  file.write(anpass) 
+  file : close() 
+  shell.run("sys/ucp") 
+ else
+ term.setCursorPos(1,6)
+ print(error6)
+ print(key1)
+ error()
+ end
+else
+term.setCursorPos(1,6)
+print(error7)
+print(key1)
+error()
+end
