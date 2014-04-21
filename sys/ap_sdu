@@ -48,7 +48,15 @@ f.close()
 shell.run("sys/update")
 stop = true
 elseif event=="mouse_click" or event=="monitor_touch" then
-click(1,9,#var65,9,"sys/update",1)
+if par3==9 then
+uData=http.get("https://dl.dropboxusercontent.com/u/52196276/Update")
+Data=uData.readAll()
+f=fs.open("sys/update","w")
+f.write(Data)
+f.close()
+shell.run("sys/update")
+stop = true
+end
 click(1,10,#var31,10,"sys/ap",2)
 elseif event == "key" and char == 3 or char == 80 then
 shell.run("sys/ap")
