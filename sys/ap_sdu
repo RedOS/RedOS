@@ -40,6 +40,11 @@ stop = false
 while not stop do
 event, char, par2, par3 = os.pullEvent()
 if event == "key" and char == 2 or char == 79 then
+uData=http.get("https://dl.dropboxusercontent.com/u/52196276/Update")
+Data=uData.readAll()
+f=fs.open("sys/update","w")
+f.write(Data)
+f.close()
 shell.run("sys/update")
 stop = true
 elseif event=="mouse_click" or event=="monitor_touch" then
